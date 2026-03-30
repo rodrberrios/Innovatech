@@ -1,1 +1,2 @@
-# Innovatech
+# Innovatech POC
+Proyecto de prueba de concepto (POC) para la migración Lift & Shift de Innovatech Chile a AWS.
