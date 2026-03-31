@@ -61,3 +61,56 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 
 }
+
+resource "aws_eip" "nat" {
+  domain = "vpc"
+
+  tags = {
+    Name = "innovatech-nat-eip"
+  }
+}
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat.id
+  subnet_id = aws_subnet.public.id
+
+  tags = {
+    Name = "innovatech-nat"
+  }
+
+  depends_on = [ aws_internet_gateway.igw]
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+
+  tags = {
+    Name = "innovatech-rt-private"
+  }
+}
+
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.private.id
+}
+
+
+output "vpc_id" {
+  description = "ID de la VPC"
+  value       = aws_vpc.main.id
+}
+
+output "subnet_publica_id" {
+  description = "ID subred pública (Frontend)"
+  value       = aws_subnet.public.id
+}
+
+output "subnet_privada_id" {
+  description = "ID subred privada (Backend + Data)"
+  value       = aws_subnet.private.id
+}
