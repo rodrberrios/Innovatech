@@ -1,6 +1,3 @@
-output "public_ip" {
-  value = aws_instance.innovatech_server.public_ip
-}
 
 
 #esto crea la vpc con el nombre main, llama a la funcion aws_vpc, y le asigna un bloque CIDR de 10.0.0.0/16, ademas de habilitar los hostnames y el soporte DNS. Finalmente, le asigna una etiqueta con el nombre innovatech-vpc.
@@ -105,12 +102,17 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
-output "subnet_publica_id" {
-  description = "ID subred pública (Frontend)"
-  value       = aws_subnet.public.id
+output "frontend_public_ip" {
+  description = "IP pública del Frontend"
+  value       = aws_instance.frontend.public_ip
 }
 
-output "subnet_privada_id" {
-  description = "ID subred privada (Backend + Data)"
-  value       = aws_subnet.private.id
+output "backend_private_ip" {
+  description = "IP privada del Backend"
+  value       = aws_instance.backend.private_ip
+}
+
+output "data_private_ip" {
+  description = "IP privada de Data"
+  value       = aws_instance.data.private_ip
 }
